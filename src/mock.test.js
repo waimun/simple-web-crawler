@@ -16,3 +16,10 @@ test('prints a html snippet', () => {
   expect(htmlSnippet()).toBeTruthy()
   console.log(htmlSnippet())
 })
+
+test('parses a html snippet with 5 anchor tags', () => {
+  const HTMLParser = require('node-html-parser')
+  const root = HTMLParser.parse(htmlSnippet())
+  const anchors = root.querySelectorAll('a')
+  expect(anchors.length).toEqual(5)
+})

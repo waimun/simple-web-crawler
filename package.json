@@ -8,5 +8,8 @@
   },
   "scripts": {
     "test": "standard && jest"
+  },
+  "dependencies": {
+    "node-html-parser": "^1.4.3"
   }
 }
