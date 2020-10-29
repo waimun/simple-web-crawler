@@ -48,8 +48,46 @@ const fetchAndCreatePage = async (fetcher, hostname, path = '/') => {
   return createPage({ hostname, path, fetched: true, fetchStatus: status })
 }
 
+const unfetchedPagesFrom = map => {
+  return [...map.entries()].filter(([k, v]) => v.fetched === false)
+}
+
+const updateMapWithFetchedResults = (crawlMap, results) => {
+  for (const result of results) {
+    const { status, value } = result
+
+    if (status === 'fulfilled') {
+      crawlMap.set(value.path, value)
+
+      for (const link of value.internalLinks) {
+        if (!crawlMap.has(link)) {
+          crawlMap.set(link, createPage({ hostname: value.hostname, path: link }))
+        }
+      }
+    }
+  }
+}
+
+const crawler = async (hostname, fetcher) => {
+  const crawlMap = new Map()
+  const rootPath = '/'
+
+  const startPage = createPage({ hostname, rootPath })
+  crawlMap.set(rootPath, startPage)
+
+  while (unfetchedPagesFrom(crawlMap).length > 0) {
+    const unfetched = unfetchedPagesFrom(crawlMap)
+    const promises = unfetched.map(([path]) => fetchAndCreatePage(fetcher, hostname, path))
+    const results = await Promise.allSettled(promises)
+    updateMapWithFetchedResults(crawlMap, results)
+  }
+
+  return crawlMap
+}
+
 exports.parseDocumentForAnchorTags = parseDocumentForAnchorTags
 exports.isInternalLink = isInternalLink
 exports.createPage = createPage
 exports.pageFromDocument = pageFromDocument
 exports.fetchAndCreatePage = fetchAndCreatePage
+exports.crawler = crawler

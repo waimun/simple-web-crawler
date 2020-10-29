@@ -1,6 +1,6 @@
 const { expect, test } = require('@jest/globals')
 const { htmlSnippet, fetchPage } = require('./mock')
-const { parseDocumentForAnchorTags, fetchAndCreatePage } = require('./')
+const { parseDocumentForAnchorTags, fetchAndCreatePage, crawler } = require('./')
 
 test('prints a html snippet', () => {
   expect(htmlSnippet()).toBeTruthy()
@@ -98,4 +98,21 @@ test('fetch url and create a page object', async () => {
   expect(testPage.fetched).toBeTruthy()
   expect(testPage.fetchStatus).toEqual(200)
   expect(testPage.internalLinks.size).toEqual(5)
+})
+
+test('crawler with fake fetcher should return 17 entries', async () => {
+  const hostname = 'www.google.com'
+
+  const crawlMap = await crawler(hostname, fetchPage)
+
+  expect(crawlMap.size).toEqual(17) // there are 17 unique urls in the fake fetcher
+
+  expect(crawlMap.has('/a112')).toBeTruthy()
+
+  const pageForA112 = crawlMap.get('/a112')
+  expect(pageForA112.fetched).toBeTruthy()
+  expect(pageForA112.fetchStatus).toEqual(200)
+  expect(pageForA112.internalLinks.size).toEqual(2)
+  expect(pageForA112.internalLinks).toContain('/a1121')
+  expect(pageForA112.internalLinks).toContain('/b')
 })
