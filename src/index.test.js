@@ -32,3 +32,16 @@ test('creates a page object', () => {
   expect(testPage.fetchStatus).toBeUndefined()
   expect(testPage.internalLinks.size).toEqual(0)
 })
+
+test('adds links to a page object', () => {
+  const props = {
+    hostname: 'www.google.com'
+  }
+
+  const testPage = createPage(props)
+
+  const links = ['/a', '/b', '/c']
+  testPage.addInternalLinks(links)
+
+  expect(testPage.internalLinks.size).toEqual(3)
+})
