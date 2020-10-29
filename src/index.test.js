@@ -1,5 +1,6 @@
 const { expect, test } = require('@jest/globals')
-const { isInternalLink, createPage } = require('./')
+const { isInternalLink, createPage, pageFromDocument } = require('./')
+const { htmlSnippet } = require('./mock')
 
 test('tests to see if a link is internal', () => {
   const relativeLink = '/a'
@@ -44,4 +45,19 @@ test('adds links to a page object', () => {
   testPage.addInternalLinks(links)
 
   expect(testPage.internalLinks.size).toEqual(3)
+})
+
+test('creates a page object from a document', () => {
+  const hostname = 'www.google.com'
+  const path = '/'
+  const document = htmlSnippet()
+
+  const testPage = pageFromDocument(hostname, path, document)
+
+  expect(testPage).toBeTruthy()
+  expect(testPage.hostname).toEqual(hostname)
+  expect(testPage.path).toEqual(path)
+  expect(testPage.fetched).toBeFalsy()
+  expect(testPage.fetchStatus).toBeUndefined()
+  expect(testPage.internalLinks.size).toEqual(5)
 })

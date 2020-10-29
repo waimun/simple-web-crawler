@@ -27,6 +27,15 @@ const createPage = ({ hostname, path = '/', fetched = false, fetchStatus, intern
   }
 }
 
+const pageFromDocument = (hostname, path, document) => {
+  const anchorTags = parseDocumentForAnchorTags(document)
+  const internalLinks = anchorTags.filter(element => isInternalLink(hostname, element))
+  const page = createPage({ hostname, path })
+  page.addInternalLinks(internalLinks)
+  return page
+}
+
 exports.parseDocumentForAnchorTags = parseDocumentForAnchorTags
 exports.isInternalLink = isInternalLink
 exports.createPage = createPage
+exports.pageFromDocument = pageFromDocument
