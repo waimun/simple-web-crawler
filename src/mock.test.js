@@ -1,4 +1,5 @@
 const { expect, test } = require('@jest/globals')
+const { parseDocumentForAnchorTags } = require('./')
 
 const htmlSnippet = () => {
   return `
@@ -18,8 +19,6 @@ test('prints a html snippet', () => {
 })
 
 test('parses a html snippet with 5 anchor tags', () => {
-  const HTMLParser = require('node-html-parser')
-  const root = HTMLParser.parse(htmlSnippet())
-  const anchors = root.querySelectorAll('a')
-  expect(anchors.length).toEqual(5)
+  const hrefs = parseDocumentForAnchorTags(htmlSnippet())
+  expect(hrefs.length).toEqual(5)
 })
