@@ -10,4 +10,13 @@ const htmlSnippet = () => {
   `
 }
 
+const fetchPage = async (hostname, path = '/') => {
+  return new Promise((resolve, reject) => {
+    if (hostname === undefined || hostname === null) reject(new Error('missing hostname'))
+
+    resolve({ status: 200, document: htmlSnippet() })
+  })
+}
+
 exports.htmlSnippet = htmlSnippet
+exports.fetchPage = fetchPage
