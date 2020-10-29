@@ -1,5 +1,5 @@
 const { expect, test } = require('@jest/globals')
-const { isInternalLink } = require('./')
+const { isInternalLink, createPage } = require('./')
 
 test('tests to see if a link is internal', () => {
   const relativeLink = '/a'
@@ -17,4 +17,18 @@ test('tests to see if a link is internal', () => {
   expect(isInternalLink(hostname, null)).toBeFalsy()
   expect(isInternalLink()).toBeFalsy()
   // this test is not extensive or thorough but good enough for the use cases I require
+})
+
+test('creates a page object', () => {
+  const props = {
+    hostname: 'www.google.com'
+  }
+
+  const testPage = createPage(props)
+
+  expect(testPage.hostname).toEqual(props.hostname)
+  expect(testPage.path).toEqual('/')
+  expect(testPage.fetched).toBeFalsy()
+  expect(testPage.fetchStatus).toBeUndefined()
+  expect(testPage.internalLinks.size).toEqual(0)
 })

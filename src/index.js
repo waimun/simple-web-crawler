@@ -14,5 +14,19 @@ const isInternalLink = (hostname, path) => {
   return false
 }
 
+const createPage = ({ hostname, path = '/', fetched = false, fetchStatus, internalLinks = new Set() }) => {
+  return {
+    hostname,
+    path,
+    fetched,
+    fetchStatus,
+    internalLinks,
+    addInternalLinks (links) {
+      links.forEach(link => this.internalLinks.add(link))
+    }
+  }
+}
+
 exports.parseDocumentForAnchorTags = parseDocumentForAnchorTags
 exports.isInternalLink = isInternalLink
+exports.createPage = createPage
