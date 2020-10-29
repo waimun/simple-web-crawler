@@ -3,9 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
+    "jest": "^26.6.1",
     "standard": "*"
   },
   "scripts": {
-    "test": "standard"
+    "test": "standard && jest"
   }
 }
