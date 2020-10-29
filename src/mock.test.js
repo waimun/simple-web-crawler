@@ -1,6 +1,6 @@
 const { expect, test } = require('@jest/globals')
 const { htmlSnippet, fetchPage } = require('./mock')
-const { parseDocumentForAnchorTags } = require('./')
+const { parseDocumentForAnchorTags, fetchAndCreatePage } = require('./')
 
 test('prints a html snippet', () => {
   expect(htmlSnippet()).toBeTruthy()
@@ -34,4 +34,18 @@ test('fetching a page fails with an error', async () => {
   } catch (e) {
     expect(e.message).toMatch('missing hostname')
   }
+})
+
+test('fetch url and create a page object', async () => {
+  const hostname = 'www.google.com'
+  const path = '/'
+
+  const testPage = await fetchAndCreatePage(fetchPage, hostname, path)
+
+  expect(testPage).toBeTruthy()
+  expect(testPage.hostname).toEqual(hostname)
+  expect(testPage.path).toEqual(path)
+  expect(testPage.fetched).toBeTruthy()
+  expect(testPage.fetchStatus).toEqual(200)
+  expect(testPage.internalLinks.size).toEqual(5)
 })

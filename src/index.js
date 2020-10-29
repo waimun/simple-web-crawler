@@ -35,7 +35,21 @@ const pageFromDocument = (hostname, path, document) => {
   return page
 }
 
+const fetchAndCreatePage = async (fetcher, hostname, path = '/') => {
+  const { status, document } = await fetcher(hostname, path)
+
+  if (status === 200) {
+    const page = pageFromDocument(hostname, path, document)
+    page.fetchStatus = status
+    page.fetched = true
+    return page
+  }
+
+  return createPage({ hostname, path, fetched: true, fetchStatus: status })
+}
+
 exports.parseDocumentForAnchorTags = parseDocumentForAnchorTags
 exports.isInternalLink = isInternalLink
 exports.createPage = createPage
 exports.pageFromDocument = pageFromDocument
+exports.fetchAndCreatePage = fetchAndCreatePage
