@@ -33,6 +33,7 @@ const removeHashFragmentFromLink = link => {
 
 const createPage = ({ hostname, path = '/', fetched = false, fetchStatus }) => {
   const internalLinks = new Set()
+  const externalLinks = new Set()
   const imageLinks = new Map()
 
   return {
@@ -41,12 +42,16 @@ const createPage = ({ hostname, path = '/', fetched = false, fetchStatus }) => {
     fetched,
     fetchStatus,
     internalLinks,
+    externalLinks,
     imageLinks,
     addInternalLinks (links) {
       links.forEach(link => {
         const sanitized = removeHashFragmentFromLink(removeHostnameFromLink(hostname, link))
         this.internalLinks.add(sanitized)
       })
+    },
+    addExternalLinks (links) {
+      links.forEach(link => this.externalLinks.add(link))
     },
     addImageLinks (links) {
       links.forEach(link => {
