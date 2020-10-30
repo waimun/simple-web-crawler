@@ -18,6 +18,11 @@ const removeHostnameFromLink = (hostname, link) => {
   return (link === baseUrl) ? '/' : link.replace(baseUrl, '')
 }
 
+const removeHashFragmentFromLink = link => {
+  const pos = link.indexOf('#')
+  return (pos === -1) ? link : link.slice(0, pos)
+}
+
 const createPage = ({ hostname, path = '/', fetched = false, fetchStatus, internalLinks = new Set() }) => {
   return {
     hostname,
@@ -120,6 +125,7 @@ const fetchPage = async (hostname, path = '/') => {
 exports.parseDocumentForAnchorTags = parseDocumentForAnchorTags
 exports.isInternalLink = isInternalLink
 exports.removeHostnameFromLink = removeHostnameFromLink
+exports.removeHashFragmentFromLink = removeHashFragmentFromLink
 exports.createPage = createPage
 exports.pageFromDocument = pageFromDocument
 exports.fetchAndCreatePage = fetchAndCreatePage

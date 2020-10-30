@@ -1,5 +1,11 @@
 const { expect, test } = require('@jest/globals')
-const { isInternalLink, removeHostnameFromLink, createPage, pageFromDocument } = require('./')
+const {
+  isInternalLink,
+  removeHostnameFromLink,
+  removeHashFragmentFromLink,
+  createPage,
+  pageFromDocument
+} = require('./')
 const { htmlSnippet } = require('./mock')
 
 test('if a link is internal', () => {
@@ -32,6 +38,16 @@ test('remove hostname from a link', () => {
 
   const anotherResult = removeHostnameFromLink(anotherHostname, linkWithHostname)
   expect(anotherResult).toEqual(linkWithHostname) // hostname has to match in order to remove
+})
+
+test('remove hash fragment from a link', () => {
+  const hostname = 'www.google.com'
+  const path = '/hello'
+  const hash = '#world'
+  const linkWithHash = `https://${hostname}${path}${hash}`
+
+  const result = removeHashFragmentFromLink(linkWithHash)
+  expect(result).toEqual(`https://${hostname}${path}`)
 })
 
 test('creates a page object', () => {
