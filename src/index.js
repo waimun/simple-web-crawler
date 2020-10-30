@@ -10,8 +10,7 @@ const isInternalLink = (hostname, path) => {
   if (hostname === undefined || hostname === null) return false
   if (path === undefined || path === null) return false
   if (path.startsWith(`https://${hostname}`)) return true
-  if (path.startsWith('/')) return true
-  return false
+  return path.startsWith('/')
 }
 
 const createPage = ({ hostname, path = '/', fetched = false, fetchStatus, internalLinks = new Set() }) => {
@@ -49,7 +48,7 @@ const fetchAndCreatePage = async (fetcher, hostname, path = '/') => {
 }
 
 const unfetchedPagesFrom = map => {
-  return [...map.entries()].filter(([k, v]) => v.fetched === false)
+  return [...map.entries()].filter(([, v]) => v.fetched === false)
 }
 
 const updateMapWithFetchedResults = (crawlMap, results) => {
