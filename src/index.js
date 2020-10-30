@@ -31,7 +31,10 @@ const createPage = ({ hostname, path = '/', fetched = false, fetchStatus, intern
     fetchStatus,
     internalLinks,
     addInternalLinks (links) {
-      links.forEach(link => this.internalLinks.add(removeHostnameFromLink(hostname, link)))
+      links.forEach(link => {
+        const sanitized = removeHashFragmentFromLink(removeHostnameFromLink(hostname, link))
+        this.internalLinks.add(sanitized)
+      })
     }
   }
 }
