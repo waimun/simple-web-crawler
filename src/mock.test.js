@@ -91,7 +91,7 @@ test('fetching a page fails with an error', async () => {
   }
 })
 
-test('fetch url and create a page object', async () => {
+test('fetch url and create a Page object', async () => {
   const hostname = 'www.google.com'
   const path = '/'
 
@@ -103,6 +103,7 @@ test('fetch url and create a page object', async () => {
   expect(testPage.fetched).toBeTruthy()
   expect(testPage.fetchStatus).toEqual(200)
   expect(testPage.internalLinks.size).toEqual(5)
+  expect(testPage.imageLinks.size).toEqual(2)
 })
 
 test('crawler with fake fetcher should return 17 entries', async () => {
@@ -117,7 +118,10 @@ test('crawler with fake fetcher should return 17 entries', async () => {
   const pageForA112 = crawlMap.get('/a112')
   expect(pageForA112.fetched).toBeTruthy()
   expect(pageForA112.fetchStatus).toEqual(200)
+
   expect(pageForA112.internalLinks.size).toEqual(2)
   expect(pageForA112.internalLinks).toContain('/a1121')
   expect(pageForA112.internalLinks).toContain('/b')
+
+  expect(pageForA112.imageLinks.size).toEqual(0)
 })

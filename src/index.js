@@ -31,17 +31,27 @@ const removeHashFragmentFromLink = link => {
   return (pos === -1) ? link : link.slice(0, pos)
 }
 
-const createPage = ({ hostname, path = '/', fetched = false, fetchStatus, internalLinks = new Set() }) => {
+const createPage = ({ hostname, path = '/', fetched = false, fetchStatus }) => {
+  const internalLinks = new Set()
+  const imageLinks = new Map()
+
   return {
     hostname,
     path,
     fetched,
     fetchStatus,
     internalLinks,
+    imageLinks,
     addInternalLinks (links) {
       links.forEach(link => {
         const sanitized = removeHashFragmentFromLink(removeHostnameFromLink(hostname, link))
         this.internalLinks.add(sanitized)
+      })
+    },
+    addImageLinks (links) {
+      links.forEach(link => {
+        const [src, alt] = link
+        this.imageLinks.set(src, alt)
       })
     }
   }
@@ -50,8 +60,13 @@ const createPage = ({ hostname, path = '/', fetched = false, fetchStatus, intern
 const pageFromDocument = (hostname, path, document) => {
   const anchorTags = parseDocumentForAnchorTags(document)
   const internalLinks = anchorTags.filter(element => isInternalLink(hostname, element))
+
+  const imageTags = parseDocumentForImageTags(document)
+
   const page = createPage({ hostname, path })
   page.addInternalLinks(internalLinks)
+  page.addImageLinks(imageTags)
+
   return page
 }
 

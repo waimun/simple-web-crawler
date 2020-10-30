@@ -50,7 +50,7 @@ test('remove hash fragment from a link', () => {
   expect(result).toEqual(`https://${hostname}${path}`)
 })
 
-test('creates a page object', () => {
+test('creates a Page object', () => {
   const props = {
     hostname: 'www.google.com'
   }
@@ -62,9 +62,10 @@ test('creates a page object', () => {
   expect(testPage.fetched).toBeFalsy()
   expect(testPage.fetchStatus).toBeUndefined()
   expect(testPage.internalLinks.size).toEqual(0)
+  expect(testPage.imageLinks.size).toEqual(0)
 })
 
-test('adds links to a page object', () => {
+test('adds links to a Page object', () => {
   const props = {
     hostname: 'www.google.com'
   }
@@ -77,7 +78,20 @@ test('adds links to a page object', () => {
   expect(testPage.internalLinks.size).toEqual(3)
 })
 
-test('creates a page object from a document', () => {
+test('adds images to a Page object', () => {
+  const props = {
+    hostname: 'www.google.com'
+  }
+
+  const testPage = createPage(props)
+
+  const images = [['/images/foo.png', 'Foo Image'], ['/images/bar.png', 'Bar Image']]
+  testPage.addImageLinks(images)
+
+  expect(testPage.imageLinks.size).toEqual(2)
+})
+
+test('creates a Page object from a document', () => {
   const hostname = 'www.google.com'
   const path = '/'
   const document = htmlSnippet()
@@ -90,4 +104,5 @@ test('creates a page object from a document', () => {
   expect(testPage.fetched).toBeFalsy()
   expect(testPage.fetchStatus).toBeUndefined()
   expect(testPage.internalLinks.size).toEqual(5)
+  expect(testPage.imageLinks.size).toEqual(2)
 })
