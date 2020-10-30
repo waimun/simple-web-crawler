@@ -1,15 +1,20 @@
 const { expect, test } = require('@jest/globals')
 const { htmlSnippet, fetchPage } = require('./mock')
-const { parseDocumentForAnchorTags, fetchAndCreatePage, crawler } = require('./')
-
-test('prints a html snippet', () => {
-  expect(htmlSnippet()).toBeTruthy()
-  console.log(htmlSnippet())
-})
+const {
+  parseDocumentForAnchorTags,
+  parseDocumentForImageTags,
+  fetchAndCreatePage,
+  crawler
+} = require('./')
 
 test('parses a html snippet with 5 anchor tags', () => {
   const hrefs = parseDocumentForAnchorTags(htmlSnippet())
   expect(hrefs.length).toEqual(5)
+})
+
+test('parses a html snippet with 2 image tags', () => {
+  const images = parseDocumentForImageTags(htmlSnippet())
+  expect(images.length).toEqual(2)
 })
 
 test('mocks fetching a page with default root path', async () => {

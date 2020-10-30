@@ -6,6 +6,8 @@ const htmlSnippet = () => {
       <a href="/c">C</a>
       <a href="/d">D</a>
       <a href="/e">E</a>
+      <img src="/images/foo.png" alt="Foo Image"/>
+      <img src="/images/bar.png" alt="Bar Image"/>
     </body>
   `
 }
