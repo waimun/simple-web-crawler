@@ -13,6 +13,11 @@ const isInternalLink = (hostname, path) => {
   return path.startsWith('/')
 }
 
+const removeHostnameFromLink = (hostname, link) => {
+  const baseUrl = `https://${hostname}`
+  return (link === baseUrl) ? '/' : link.replace(baseUrl, '')
+}
+
 const createPage = ({ hostname, path = '/', fetched = false, fetchStatus, internalLinks = new Set() }) => {
   return {
     hostname,
@@ -21,7 +26,7 @@ const createPage = ({ hostname, path = '/', fetched = false, fetchStatus, intern
     fetchStatus,
     internalLinks,
     addInternalLinks (links) {
-      links.forEach(link => this.internalLinks.add(link))
+      links.forEach(link => this.internalLinks.add(removeHostnameFromLink(hostname, link)))
     }
   }
 }
@@ -114,6 +119,7 @@ const fetchPage = async (hostname, path = '/') => {
 
 exports.parseDocumentForAnchorTags = parseDocumentForAnchorTags
 exports.isInternalLink = isInternalLink
+exports.removeHostnameFromLink = removeHostnameFromLink
 exports.createPage = createPage
 exports.pageFromDocument = pageFromDocument
 exports.fetchAndCreatePage = fetchAndCreatePage

@@ -1,8 +1,8 @@
 const { expect, test } = require('@jest/globals')
-const { isInternalLink, createPage, pageFromDocument } = require('./')
+const { isInternalLink, removeHostnameFromLink, createPage, pageFromDocument } = require('./')
 const { htmlSnippet } = require('./mock')
 
-test('tests to see if a link is internal', () => {
+test('if a link is internal', () => {
   const relativeLink = '/a'
   const linkWithHostname = 'https://www.google.com'
   const linkWithAnotherHostname = 'https://www.twitter.com'
@@ -18,6 +18,20 @@ test('tests to see if a link is internal', () => {
   expect(isInternalLink(hostname, null)).toBeFalsy()
   expect(isInternalLink()).toBeFalsy()
   // this test is not extensive or thorough but good enough for the use cases I require
+})
+
+test('remove hostname from a link', () => {
+  const hostname = 'www.google.com'
+  const path = '/hello'
+  const linkWithHostname = `https://${hostname}${path}`
+
+  const result = removeHostnameFromLink(hostname, linkWithHostname)
+  expect(result).toEqual(path)
+
+  const anotherHostname = 'www.twitter.com'
+
+  const anotherResult = removeHostnameFromLink(anotherHostname, linkWithHostname)
+  expect(anotherResult).toEqual(linkWithHostname) // hostname has to match in order to remove
 })
 
 test('creates a page object', () => {
