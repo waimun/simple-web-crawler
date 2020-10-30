@@ -129,6 +129,11 @@ const printCrawlerOutput = crawlMap => {
     for (const link of value.internalLinks) {
       console.log(`    ${link}`)
     }
+    console.log(`  Image Links: ${value.imageLinks.size}`)
+    for (const image of value.imageLinks) {
+      const [src, alt] = image
+      console.log(`    [${alt}](${src})`)
+    }
     console.log('--------------')
   })
 }
