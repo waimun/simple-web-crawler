@@ -97,6 +97,19 @@ const crawler = async (hostname, fetcher) => {
   return crawlMap
 }
 
+const printCrawlerOutput = crawlMap => {
+  console.log('Crawler Output')
+  console.log('--------------')
+  crawlMap.forEach((value, key) => {
+    console.log(`Path: ${key}`)
+    console.log(`  Internal Links: ${value.internalLinks.size}`)
+    for (const link of value.internalLinks) {
+      console.log(`    ${link}`)
+    }
+    console.log('--------------')
+  })
+}
+
 const fetchPage = async (hostname, path = '/') => {
   return new Promise((resolve, reject) => {
     if (hostname === undefined || hostname === null) reject(new Error('missing hostname'))
@@ -133,4 +146,5 @@ exports.createPage = createPage
 exports.pageFromDocument = pageFromDocument
 exports.fetchAndCreatePage = fetchAndCreatePage
 exports.crawler = crawler
+exports.printCrawlerOutput = printCrawlerOutput
 exports.fetchPage = fetchPage
