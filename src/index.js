@@ -130,25 +130,36 @@ const crawler = async (hostname, fetcher) => {
 }
 
 const printCrawlerOutput = crawlMap => {
-  console.log('Crawler Output')
-  console.log('--------------')
+  let output = ''
+  const newLine = '\n'
+  const lineSeparator = '\n--------------'
+
+  output += newLine + 'Crawler Output'
+  output += lineSeparator
+
   crawlMap.forEach((value, key) => {
-    console.log(`Path: ${key}`)
-    console.log(`  Internal Links: ${value.internalLinks.size}`)
+    output += newLine + `Path: ${key}`
+
+    output += newLine + `  Internal Links: ${value.internalLinks.size}`
     for (const link of value.internalLinks) {
-      console.log(`    ${link}`)
+      output += newLine + `    ${link}`
     }
-    console.log(`  Image Links: ${value.imageLinks.size}`)
+
+    output += newLine + `  Image Links: ${value.imageLinks.size}`
     for (const image of value.imageLinks) {
       const [src, alt] = image
-      console.log(`    [${alt}](${src})`)
+      output += newLine + `    [${alt}](${src})`
     }
-    console.log(`  External Links: ${value.externalLinks.size}`)
+
+    output += newLine + `  External Links: ${value.externalLinks.size}`
     for (const link of value.externalLinks) {
-      console.log(`    ${link}`)
+      output += newLine + `    ${link}`
     }
-    console.log('--------------')
+
+    output += lineSeparator
   })
+
+  return output
 }
 
 const fetchPage = async (hostname, path = '/') => {
@@ -181,7 +192,7 @@ const fetchPage = async (hostname, path = '/') => {
 
 const runner = async (hostname, fetcher) => {
   const crawlMap = await crawler(hostname, fetcher)
-  printCrawlerOutput(crawlMap)
+  console.log(printCrawlerOutput(crawlMap))
 }
 
 exports.parseDocumentForAnchorTags = parseDocumentForAnchorTags
