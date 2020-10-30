@@ -138,6 +138,11 @@ const fetchPage = async (hostname, path = '/') => {
   })
 }
 
+const runner = async (hostname, fetcher) => {
+  const crawlMap = await crawler(hostname, fetcher)
+  printCrawlerOutput(crawlMap)
+}
+
 exports.parseDocumentForAnchorTags = parseDocumentForAnchorTags
 exports.isInternalLink = isInternalLink
 exports.removeHostnameFromLink = removeHostnameFromLink
@@ -148,3 +153,4 @@ exports.fetchAndCreatePage = fetchAndCreatePage
 exports.crawler = crawler
 exports.printCrawlerOutput = printCrawlerOutput
 exports.fetchPage = fetchPage
+exports.runner = runner
