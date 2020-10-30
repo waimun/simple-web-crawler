@@ -192,7 +192,7 @@ const fetchPage = async (hostname, path = '/') => {
 
 const runner = async (hostname, fetcher) => {
   const crawlMap = await crawler(hostname, fetcher)
-  console.log(printCrawlerOutput(crawlMap))
+  return printCrawlerOutput(crawlMap)
 }
 
 exports.parseDocumentForAnchorTags = parseDocumentForAnchorTags
