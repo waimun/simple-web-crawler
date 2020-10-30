@@ -103,6 +103,7 @@ test('fetch url and create a Page object', async () => {
   expect(testPage.fetched).toBeTruthy()
   expect(testPage.fetchStatus).toEqual(200)
   expect(testPage.internalLinks.size).toEqual(5)
+  expect(testPage.externalLinks.size).toEqual(0)
   expect(testPage.imageLinks.size).toEqual(2)
 })
 
@@ -122,6 +123,9 @@ test('crawler with fake fetcher should return 17 entries', async () => {
   expect(pageForA112.internalLinks.size).toEqual(2)
   expect(pageForA112.internalLinks).toContain('/a1121')
   expect(pageForA112.internalLinks).toContain('/b')
+
+  expect(pageForA112.externalLinks.size).toEqual(1)
+  expect(pageForA112.externalLinks).toContain('https://twitter.com')
 
   expect(pageForA112.imageLinks.size).toEqual(0)
 })

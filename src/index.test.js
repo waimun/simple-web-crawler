@@ -11,19 +11,23 @@ const { htmlSnippet } = require('./mock')
 test('if a link is internal', () => {
   const relativeLink = '/a'
   const linkWithHostname = 'https://www.google.com'
-  const linkWithAnotherHostname = 'https://www.twitter.com'
   const hostname = 'www.google.com'
 
   expect(isInternalLink(hostname, relativeLink)).toBeTruthy()
   expect(isInternalLink(hostname, linkWithHostname)).toBeTruthy()
-  expect(isInternalLink(hostname, linkWithAnotherHostname)).toBeFalsy()
-  expect(isInternalLink(hostname, linkWithAnotherHostname)).toBeFalsy()
   expect(isInternalLink(undefined, relativeLink)).toBeFalsy()
   expect(isInternalLink(null, relativeLink)).toBeFalsy()
   expect(isInternalLink(hostname, undefined)).toBeFalsy()
   expect(isInternalLink(hostname, null)).toBeFalsy()
   expect(isInternalLink()).toBeFalsy()
   // this test is not extensive or thorough but good enough for the use cases I require
+})
+
+test('if a link is external', () => {
+  const linkWithAnotherHostname = 'https://www.twitter.com'
+  const hostname = 'www.google.com'
+
+  expect(isInternalLink(hostname, linkWithAnotherHostname)).toBeFalsy()
 })
 
 test('remove hostname from a link', () => {
@@ -62,10 +66,11 @@ test('creates a Page object', () => {
   expect(testPage.fetched).toBeFalsy()
   expect(testPage.fetchStatus).toBeUndefined()
   expect(testPage.internalLinks.size).toEqual(0)
+  expect(testPage.externalLinks.size).toEqual(0)
   expect(testPage.imageLinks.size).toEqual(0)
 })
 
-test('adds links to a Page object', () => {
+test('adds internal links to a Page object', () => {
   const props = {
     hostname: 'www.google.com'
   }
@@ -76,6 +81,19 @@ test('adds links to a Page object', () => {
   testPage.addInternalLinks(links)
 
   expect(testPage.internalLinks.size).toEqual(3)
+})
+
+test('adds external links to a Page object', () => {
+  const props = {
+    hostname: 'www.google.com'
+  }
+
+  const testPage = createPage(props)
+
+  const links = ['https://twitter.com', 'https://www.facebook.com/', 'https://www.microsoft.com']
+  testPage.addExternalLinks(links)
+
+  expect(testPage.externalLinks.size).toEqual(3)
 })
 
 test('adds images to a Page object', () => {
@@ -104,5 +122,6 @@ test('creates a Page object from a document', () => {
   expect(testPage.fetched).toBeFalsy()
   expect(testPage.fetchStatus).toBeUndefined()
   expect(testPage.internalLinks.size).toEqual(5)
+  expect(testPage.externalLinks.size).toEqual(0)
   expect(testPage.imageLinks.size).toEqual(2)
 })

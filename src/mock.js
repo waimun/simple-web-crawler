@@ -46,6 +46,7 @@ const htmlSnippetA112 = () => {
     <body>
       <a href="/a1121">A1121</a>
       <a href="/b">B</a>
+      <a href="https://twitter.com">Twitter</a>
     </body>
   `
 }

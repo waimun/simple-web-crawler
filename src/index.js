@@ -64,12 +64,16 @@ const createPage = ({ hostname, path = '/', fetched = false, fetchStatus }) => {
 
 const pageFromDocument = (hostname, path, document) => {
   const anchorTags = parseDocumentForAnchorTags(document)
-  const internalLinks = anchorTags.filter(element => isInternalLink(hostname, element))
+
+  const internalLinks = []
+  const externalLinks = []
+  anchorTags.forEach(anchor => isInternalLink(hostname, anchor) ? internalLinks.push(anchor) : externalLinks.push(anchor))
 
   const imageTags = parseDocumentForImageTags(document)
 
   const page = createPage({ hostname, path })
   page.addInternalLinks(internalLinks)
+  page.addExternalLinks(externalLinks)
   page.addImageLinks(imageTags)
 
   return page
