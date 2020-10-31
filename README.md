@@ -83,8 +83,28 @@ tests execute fast because they do not depend on any side effects or network.
 #### Data model
 
 The `Page` object is the most important piece of data that the crawler interacts with most. Most of the design making
-decisions evolved from this model. You can create a Page object using the `createPage` factory function. Unit tests are
-a good way to understand how it is used extensively.
+decisions evolved from this model. You can create a Page object using the `createPage` factory function. Unit tests
+are a good way to understand how it is used extensively.
 
 The second object is the `crawlMap`. It is not really a custom data object. Practically, it is just a `Map` that is
 used as an underlying data store to track the urls visited. The crawler uses the `Map` to iterate through the fetches.
+
+#### Functions
+
+Functions-first by choice. I have used only functions to implement the basic requirements I have put together in this
+project. There are no classes to instantiate and JS does not support interfaces. There are no types either so code
+needs to be simple, readable and expressive.
+
+One notable function is `fetchAndCreatePage`. It is an important function that orchestrates work among other helper
+functions to fetch webpages, parse html content and transfer data to the data model. Worthwhile to take a closer look
+as the `crawler` function uses it. The `fetchAndCreatePage` function requires a fetcher function to operate. You can
+swap different implementations of the fetcher as we saw an example of the fake fetcher.
+
+The `crawler` function is the main driver to the web crawler operation. It encapsulates the `crawlMap` as the
+underlying in-memory data store.
+
+#### Command line interface (CLI)
+
+The web crawler is available as a CLI. The `cli.js` script invokes it. This script provides basic command line usage
+and passes the user supplied argument to the `runner` function to run. It prints the output of the crawler results
+on the console.
