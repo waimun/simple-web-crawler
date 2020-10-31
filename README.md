@@ -5,6 +5,9 @@ The output of the crawl, in a text format, displays all the paths visited under 
 and images found on each page. The crawler does not follow any links to external websites other than the same domain
 specified as a starting point.
 
+This project should not be used in a production environment. There are some missing features before it can be more
+robust and production-ready.
+
 ## 🏗️ Build
 
 To build the project, the following are the requisites.
@@ -108,3 +111,35 @@ underlying in-memory data store.
 The web crawler is available as a CLI. The `cli.js` script invokes it. This script provides basic command line usage
 and passes the user supplied argument to the `runner` function to run. It prints the output of the crawler results
 on the console.
+
+#### Tradeoffs
+
+While working on the project, I have to make some tradeoffs or priorities. They are listed below.
+
+- Process only http status 200 that are returned from documents
+- Store url as key in the `Map`
+- No retries for failed requests
+- Not keeping track of failed requests
+- Handle urls with query parameters which are dynamic (server-side rendered)
+- Potentially not handling cyclic requests based on the above
+- Works better on webpages that are static or file-based
+- Memory limitation
+- Single worker (not distributed)
+- HTTPS only
+- Little validation on function inputs (assume inputs are correct)
+
+#### With more time
+
+I would like to accomplish the following.
+
+- [ ] Validation of function parameters
+- [ ] Support redirects
+- [ ] Support retries
+- [ ] Handle cyclic requests
+- [ ] Create docker container for the app
+- [ ] Continuous integration
+- [ ] Provide stats (number of pass/fail, time elapsed, etc) in the crawl's output
+- [ ] Improve the format of the crawl's output
+- [ ] Accept url as a starting point (nice to have)
+- [ ] Support http (lower priority)
+- [ ] Support custom ports (if necessary)
