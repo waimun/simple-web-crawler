@@ -5,8 +5,8 @@ const {
   removeHashFragmentFromLink,
   createPage,
   pageFromDocument
-} = require('./')
-const { htmlSnippet } = require('./mock')
+} = require('../')
+const { htmlSnippet } = require('../mocks')
 
 test('if a link is internal', () => {
   const relativeLink = '/a'

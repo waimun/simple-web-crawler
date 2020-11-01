@@ -1,11 +1,11 @@
 const { expect, test } = require('@jest/globals')
-const { htmlSnippet, fetchPage } = require('./mock')
+const { htmlSnippet, fetchPage } = require('../mocks')
 const {
   parseDocumentForAnchorTags,
   parseDocumentForImageTags,
   fetchAndCreatePage,
   crawler
-} = require('./')
+} = require('../')
 
 test('parses a html snippet with 5 anchor tags', () => {
   const hrefs = parseDocumentForAnchorTags(htmlSnippet())

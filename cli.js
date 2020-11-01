@@ -1,11 +1,11 @@
-const { runner, fetchPage } = require('./')
+const { runner, fetchPage } = require('./src')
 
 const commandArgs = process.argv.slice(2)
 
 if (commandArgs.length === 0) {
   console.log(`Usage: cli.js <domain>
   Example: cli.js www.example.com
-  Note: the crawler will crawl the domain using https`)
+  Note: the web crawler will crawl the domain using https`)
 
   process.exit(0)
 }
