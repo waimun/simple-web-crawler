@@ -80,16 +80,21 @@ const pageFromDocument = (hostname, path, document) => {
 }
 
 const fetchAndCreatePage = async (fetcher, hostname, path = '/') => {
-  const { status, document } = await fetcher(hostname, path)
+  try {
+    const { status, document } = await fetcher(hostname, path)
 
-  if (status === 200) {
-    const page = pageFromDocument(hostname, path, document)
-    page.fetchStatus = status
-    page.fetched = true
-    return page
+    if (status === 200) {
+      const page = pageFromDocument(hostname, path, document)
+      page.fetchStatus = status
+      page.fetched = true
+      return page
+    }
+
+    return createPage({ hostname, path, fetched: true, fetchStatus: status })
+  } catch (e) {
+    // fetcher internal error
+    return createPage({ hostname, path, fetched: true }) // undefined fetchStatus
   }
-
-  return createPage({ hostname, path, fetched: true, fetchStatus: status })
 }
 
 const unfetchedPagesFrom = map => {
@@ -98,15 +103,13 @@ const unfetchedPagesFrom = map => {
 
 const updateMapWithFetchedResults = (crawlMap, results) => {
   for (const result of results) {
-    const { status, value } = result
+    const { value } = result
 
-    if (status === 'fulfilled') {
-      crawlMap.set(value.path, value)
+    crawlMap.set(value.path, value)
 
-      for (const link of value.internalLinks) {
-        if (!crawlMap.has(link)) {
-          crawlMap.set(link, createPage({ hostname: value.hostname, path: link }))
-        }
+    for (const link of value.internalLinks) {
+      if (!crawlMap.has(link)) {
+        crawlMap.set(link, createPage({ hostname: value.hostname, path: link }))
       }
     }
   }

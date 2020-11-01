@@ -118,8 +118,11 @@ const fetchPage = async (hostname, path = '/') => {
       case '/e':
         resolve({ status: 200, document: htmlSnippetE() })
         return
-      default:
+      case '/notfound':
         resolve({ status: 404, document: '' })
+        return
+      default:
+        reject(new Error('simulate an internal system error in the fetcher'))
     }
   })
 }

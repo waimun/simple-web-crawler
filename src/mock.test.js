@@ -81,13 +81,26 @@ test('mocks fetching a 404 page', async () => {
   expect(hrefs.length).toEqual(0)
 })
 
-test('fetching a page fails with an error', async () => {
+test('fetching a page without specifying a hostname', async () => {
   expect.assertions(1)
 
   try {
     await fetchPage() // no hostname provided
   } catch (e) {
     expect(e.message).toMatch('missing hostname')
+  }
+})
+
+test('fetching a page fails with an internal system error', async () => {
+  expect.assertions(1)
+
+  try {
+    const hostname = 'www.google.com'
+    const path = '/error' // delegates to default in switch statement
+
+    await fetchPage(hostname, path)
+  } catch (e) {
+    expect(e.message).toMatch('simulate an internal system error in the fetcher')
   }
 })
 
@@ -105,6 +118,28 @@ test('fetch url and create a Page object', async () => {
   expect(testPage.internalLinks.size).toEqual(5)
   expect(testPage.externalLinks.size).toEqual(0)
   expect(testPage.imageLinks.size).toEqual(2)
+})
+
+test('rejected promise from fetcher', async () => {
+  const hostname = 'www.google.com'
+  const path = '/error' // delegates to default in switch statement
+
+  // fetchAndCreatePage will handle the rejection and resolve to a Page with fetchStatus=undefined
+  const testPage = await fetchAndCreatePage(fetchPage, hostname, path)
+
+  expect(testPage).toBeTruthy()
+  expect(testPage.hostname).toEqual(hostname)
+  expect(testPage.path).toEqual(path)
+  expect(testPage.fetched).toBeTruthy()
+
+  // currently not capturing the system error number
+  // fetchStatus is reserved for http status
+  // new property should be introduced if capturing other types of error in the future
+  expect(testPage.fetchStatus).toBeUndefined()
+
+  expect(testPage.internalLinks.size).toEqual(0)
+  expect(testPage.externalLinks.size).toEqual(0)
+  expect(testPage.imageLinks.size).toEqual(0)
 })
 
 test('crawler with fake fetcher should return 17 entries', async () => {
