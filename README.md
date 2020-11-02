@@ -10,7 +10,7 @@ robust and production-ready.
 
 ## 🏗️ Build
 
-To build the project, the following are the requisites.
+To build the project, below are the requisites.
 
 - Node.js 14.15.0
   - Download at [Node.js official website](https://nodejs.org/)
@@ -43,7 +43,7 @@ npm test
 The web crawler has a command line interface and to run it, you would run the CLI script (cli.js) via `node` command.
 
 ```
-node src/cli.js
+node cli.js
 ```
 
 The CLI script has 1 required argument and if you run it without specifying any arguments, it will display the usage
@@ -52,13 +52,13 @@ help.
 ```
 Usage: cli.js <domain>
   Example: cli.js www.example.com
-  Note: the crawler will crawl the domain using https
+  Note: the web crawler will crawl the domain using https
 ```
 
 **Note:** Please do not specify a URL for the `domain` argument. The domain should not begin with http or https. At
-this time, the web crawler only supports https protocol, and do not support custom ports yet. Domain redirects (301)
-are ignored so please make sure you specify the final destination for the domain name in order for the crawler to
-fetch correctly.
+this time, the web crawler only supports https protocol, and does not support custom ports yet. Domain redirects
+(301, 302) are ignored so please make sure you specify the final destination for the domain name in order for the
+crawler to fetch correctly.
 
 ## ⚒️ Design
 
@@ -94,7 +94,7 @@ used as an underlying data store to track the urls visited. The crawler uses the
 
 #### Functions
 
-Functions-first by choice. I have used only functions to implement the basic requirements I have put together in this
+Functions-first by choice. I have solely used functions to implement the basic requirements I have put together in this
 project. There are no classes to instantiate and JS does not support interfaces. There are no types either so code
 needs to be simple, readable and expressive.
 
@@ -103,7 +103,9 @@ functions to fetch webpages, parse html content and transfer data to the data mo
 as the `crawler` function uses it. The `fetchAndCreatePage` function requires a fetcher function to operate. You can
 swap different implementations of the fetcher as we saw an example of the fake fetcher.
 
-The `crawler` function is the main driver to the web crawler operation. It encapsulates the `crawlMap` as the
+![fetchAndCreatePage sequence](https://user-images.githubusercontent.com/1822956/97823091-e994c000-1c85-11eb-873e-cd0fd8232af8.png)
+
+The `crawler` function is the main driver to the web crawler operation. It encapsulates the `crawlMap` as an
 underlying in-memory data store.
 
 #### Command line interface (CLI)
@@ -114,7 +116,7 @@ on the console.
 
 #### Tradeoffs
 
-While working on the project, I have to make some tradeoffs or priorities. They are listed below.
+While working on the project, I have to make some tradeoffs and priorities. They are listed below.
 
 - Process only http status 200 that are returned from documents
 - Store url as key in the `Map`
@@ -124,9 +126,11 @@ While working on the project, I have to make some tradeoffs or priorities. They 
 - Potentially not handling cyclic requests based on the above
 - Works better on webpages that are static or file-based
 - Memory limitation
+- Guard against too many requests
 - Single worker (not distributed)
 - HTTPS only
 - Little validation on function inputs (assume inputs are correct)
+- Recognize `<a>` and `<img>` tags only
 
 #### With more time
 
@@ -136,6 +140,7 @@ I would like to accomplish the following.
 - [ ] Support redirects
 - [ ] Support retries
 - [ ] Handle cyclic requests
+- [ ] Guard against too many requests
 - [ ] Create docker container for the app
 - [ ] Continuous integration
 - [ ] Provide stats (number of pass/fail, time elapsed, etc) in the crawl's output
@@ -143,3 +148,4 @@ I would like to accomplish the following.
 - [ ] Accept url as a starting point (nice to have)
 - [ ] Support http (lower priority)
 - [ ] Support custom ports (if necessary)
+- [ ] Explore other ways where links and images can be found on a webpage
