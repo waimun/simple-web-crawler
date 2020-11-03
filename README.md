@@ -13,28 +13,46 @@ robust and production-ready.
 To build the project, below are the requisites.
 
 - Node.js 14.15.0
+  - **If using Node.js** instead of Docker to build and run
   - Download at [Node.js official website](https://nodejs.org/)
   - Code written and tested with this version so can't guarantee it will run on lower or higher versions
+- Docker 19.03.13
+  - **If using Docker** instead of Node.js to build and run
+  - Download at [Docker official website](https://www.docker.com/)
 
 ### Build it!
 
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/waimun/simple-web-crawler/Node.js%20CI)
+
+#### Option 1: using Node.js installed locally
+
 Make sure you have Node.js installed by typing `node --version`
 
-Open a terminal and in the root of the project where package.json resides, type:
+Open a terminal and in the root of the project where `package.json` resides, type:
 
-```
+```console
 npm install
 ```
 
 `npm install` will download the project dependencies from the internet and install them locally. Make sure there
 are no errors before continuing.
 
+#### Option 2: using Docker
+
+Make sure you have Docker installed by typing `docker --version`
+
+Open a terminal and in the root of the project where `Dockerfile` resides, type:
+
+```console
+docker build -t simple-web-crawler .
+```
+
 ## 🧪 Test
 
 Run the unit tests in the project to make sure they pass all the time. It is always a good idea to make sure before
-running the application.
+running the application. If you're using Docker, you may skip this part.
 
-```
+```console
 npm test
 ```
 
@@ -42,7 +60,7 @@ npm test
 
 The web crawler has a command line interface and to run it, you would run the CLI script (cli.js) via `node` command.
 
-```
+```console
 node cli.js
 ```
 
@@ -59,6 +77,16 @@ Usage: cli.js <domain>
 this time, the web crawler only supports https protocol, and does not support custom ports yet. Domain redirects
 (301, 302) are ignored so please make sure you specify the final destination for the domain name in order for the
 crawler to fetch correctly.
+
+#### Using Docker
+
+If you followed the build instructions above, you can run the CLI script via the command below.
+
+```console
+docker run --name crawl --rm simple-web-crawler cli.js www.example.com
+```
+
+Don't forget to replace `www.example.com` with the domain you wish to crawl.
 
 ## ⚒️ Design
 
@@ -116,7 +144,7 @@ on the console.
 
 #### Tradeoffs
 
-While working on the project, I have to make some tradeoffs and priorities. They are listed below.
+While working on the project, I have to make certain tradeoffs and priorities. They are listed below.
 
 - Process only http status 200 that are returned from documents
 - Store url as key in the `Map`
@@ -141,8 +169,8 @@ I would like to accomplish the following.
 - [ ] Support retries
 - [ ] Handle cyclic requests
 - [ ] Guard against too many requests
-- [ ] Create docker container for the app
-- [ ] Continuous integration
+- [x] Create docker container for the app
+- [x] Continuous integration
 - [ ] Provide stats (number of pass/fail, time elapsed, etc) in the crawl's output
 - [ ] Improve the format of the crawl's output
 - [ ] Accept url as a starting point (nice to have)
