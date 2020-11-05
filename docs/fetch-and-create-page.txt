@@ -1,0 +1,25 @@
+title fetchAndCreatePage function
+
+participant fetchAndCreatePage
+participant fetcher
+participant pageFromDocument
+participant createPage
+
+fetchAndCreatePage->fetcher:(hostname, path)
+fetcher->fetcher:fetches page via https
+fetchAndCreatePage<--fetcher:response (status, document)
+alt status=200
+fetchAndCreatePage->pageFromDocument:(hostname, path, document)
+pageFromDocument->pageFromDocument:parses document
+pageFromDocument->createPage:(hostname, path)
+pageFromDocument<--createPage:returns page
+pageFromDocument->pageFromDocument:enriches page with metadata,\nset fetched=true, fetchStatus=200
+fetchAndCreatePage<--pageFromDocument:returns page
+else status=?
+fetchAndCreatePage->createPage:(hostname, path, fetched=true, fetchStatus=?)
+fetchAndCreatePage<--createPage:returns page
+else error
+fetchAndCreatePage->createPage:(hostname, path, fetched=true, fetchStatus=undefined)
+fetchAndCreatePage<--createPage:returns page
+end
+note over fetchAndCreatePage:Page object returned to caller

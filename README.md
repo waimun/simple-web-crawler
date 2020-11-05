@@ -90,6 +90,41 @@ Don't forget to replace `www.example.com` with the domain you wish to crawl.
 
 ## ⚒️ Design
 
+#### The works
+
+Domain: `www.example.com`
+
+Path: /
+
+- /a
+  - /a1
+    - /a11
+      - /a111
+      - /a112
+        - /a1121
+        - /b
+        - External links (twitter.com)
+      - /c
+    - /a12
+  - /a2
+  - /a3
+- /b
+  - /b1
+  - /b2
+  - /
+- /c
+  - /c1
+  - /a
+- /d
+  - Images (ping.png)
+- /e
+  - External links (google.com)
+  - Images (foo.png, bar.png)
+
+Imagine you're crawling through a web of pages on a given website, the above outlines an example where you can find
+different webpages with possible internal/external links, and images. Or none of these. Each page can link to other
+internal pages via anchor tags, and hence the web crawler should follow the links internally but not externally.
+
 #### HTML parser
 
 In order to find links and images on a webpage, the HTML content served from a web server has to be parsed to look for
@@ -126,15 +161,26 @@ Functions-first by choice. I have solely used functions to implement the basic r
 project. There are no classes to instantiate and JS does not support interfaces. There are no types either so code
 needs to be simple, readable and expressive.
 
+##### Fetch an url and create a Page object
+
 One notable function is `fetchAndCreatePage`. It is an important function that orchestrates work among other helper
 functions to fetch webpages, parse html content and transfer data to the data model. Worthwhile to take a closer look
-as the `crawler` function uses it. The `fetchAndCreatePage` function requires a fetcher function to operate. You can
+as the `crawler` function depends on it. The `fetchAndCreatePage` function requires a fetcher function to operate. You can
 swap different implementations of the fetcher as we saw an example of the fake fetcher.
 
 ![fetchAndCreatePage sequence](https://user-images.githubusercontent.com/1822956/97823091-e994c000-1c85-11eb-873e-cd0fd8232af8.png)
 
+##### Crawler - a facade that uses a fetcher to create a representation of the site map
+
 The `crawler` function is the main driver to the web crawler operation. It encapsulates the `crawlMap` as an
-underlying in-memory data store.
+underlying in-memory data store. Take a look at how it uses a fetcher to do its job.
+
+#### Promises
+
+The application code has asynchronous function calls that use
+[Promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) to asynchronously
+fetch webpages and process content retrieved from the web. This convention has clear objectives to leverage Node.js
+single-threaded model to do more without pausing the event loop.
 
 #### Command line interface (CLI)
 
