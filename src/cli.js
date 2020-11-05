@@ -1,4 +1,4 @@
-const { runner, fetchPage } = require('./src')
+const { runner, fetchPage } = require('./')
 
 const commandArgs = process.argv.slice(2)
 
