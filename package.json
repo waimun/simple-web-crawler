@@ -3,13 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
-    "jest": "^26.6.1",
-    "standard": "*"
+    "jest": "^29.3.1",
+    "standard": "^17.0.0"
   },
   "scripts": {
     "test": "standard && jest"
   },
   "dependencies": {
-    "node-html-parser": "^1.4.3"
+    "node-html-parser": "^6.1.4"
   }
 }

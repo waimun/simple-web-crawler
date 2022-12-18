@@ -12,11 +12,11 @@ robust and production-ready.
 
 To build the project, below are the requisites.
 
-- Node.js 14.15.0
+- Node.js 18.12.1
   - **If using Node.js** instead of Docker to build and run
   - Download at [Node.js official website](https://nodejs.org/)
   - Code written and tested with this version so can't guarantee it will run on lower or higher versions
-- Docker 19.03.13
+- Docker 20.10.21
   - **If using Docker** instead of Node.js to build and run
   - Download at [Docker official website](https://www.docker.com/)
 

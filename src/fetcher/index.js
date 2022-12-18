@@ -4,7 +4,7 @@ const fetchPage = async (hostname, path = '/') => {
 
     const https = require('https')
     const options = {
-      hostname: hostname,
+      hostname,
       path: path.trim()
     }
 
