@@ -22,7 +22,7 @@ To build the project, below are the requisites.
 
 ### Build it!
 
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/waimun/simple-web-crawler/Node.js%20CI)
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/waimun/simple-web-crawler/node.js.yml?branch=main)
 
 #### Option 1: using Node.js installed locally
 
